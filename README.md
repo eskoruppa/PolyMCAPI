@@ -12,31 +12,68 @@ PolyMC is a Monte Carlo simulation package for semiflexible polymers, supporting
 
 ## Installation
 
-Copy `polymc.py` into your project or add it to your Python path:
+### From Source
+
+Clone this repository and install with pip:
 
 ```bash
-cp polymc.py /path/to/your/project/
+git clone https://github.com/eskoruppa/PolyMCAPI
+cd PolyMCAPI
+pip install -e .
+```
+
+The `-e` flag installs in editable mode, which is useful for development.
+
+For a regular installation:
+
+```bash
+pip install .
+```
+
+### From GitHub (Direct)
+
+Install directly from GitHub without cloning:
+
+```bash
+pip install git+https://github.com/eskoruppa/PolyMCAPI.git
+```
+
+### Usage After Installation
+
+Once installed, you can import the package from anywhere:
+
+```python
+from polymcapi import PolyMC
 ```
 
 ## Quick Start
 
 ```python
-from polymc import PolyMC
+from polymcapi import PolyMC
 
 # Initialize with path to executable
-sim = PolyMC("./PolyMC")
-print(sim)  # PolyMC(exec_file='./PolyMC', version='0.73')
+sim = PolyMC("./example/PolyMC")
+print(sim)  # PolyMC(exec_file='./example/PolyMC', version='0.73')
 
 # Run a simulation
 result = sim.run(
-    input_file="input.in",
-    output_dir="output/run_001",
-    params={"num_bp": 101, "force": 2.0, "T": 300, "sequence": "seq.seq"},
+    input_file="example/input",
+    output_dir="example/output/run_001",
+    params={
+        "num_bp": 101,
+        "idb": "example/TWLC.idb",
+        "seq": "example/seq",
+        "steps": 400000,
+        "equi": 0,
+        "XYZn": 1000
+    },
 )
 
 if result["success"]:
     print(f"Done in {result['elapsed_time']:.1f}s")
 ```
+
+See [example.py](example.py) for a complete working example.
 
 ## API Reference
 
@@ -104,7 +141,95 @@ params = {"EV": None}
 # → -EV
 
 # IDB and sequence files are passed like any other parameter
-params = {"IDB": "TWLC.idb", "sequence": "myseq.seq", "num_bp": 101}
+params = {
+    "idb": "TWLC.idb",
+    "seq": "myseq.seq",
+    "num_bp": 101,
+    "steps": 400000,
+    "equi": 0,
+    "XYZn": 1000
+}
+# → -idb TWLC.idb -seq myseq.seq -num_bp 101 -steps 400000 -equi 0 -XYZn 1000
 ```
 
-Command-line flags always take precedence over values in the input file, matching PolyMC's native behavior.
+## Project Structure
+
+```
+PolyMCAPI/
+├── polymcapi/
+│   ├── __init__.py      # Package initialization
+│   └── polymc.py        # Main PolyMC class implementation
+├── example/
+│   ├── PolyMC           # PolyMC executable
+│   ├── input            # Input configuration file
+│   ├── seq              # DNA sequence file
+│   └── TWLC.idb         # IDB parameter file
+├── example.py           # Complete working example
+├── pyproject.toml       # Package metadata and build configuration
+├── setup.py             # Setup script (for backwards compatibility)
+├── MANIFEST.in          # Files to include in source distribution
+├── README.md            # This file
+└── LICENSE              # License information
+```
+
+## Exception Handling
+
+The API defines two exception types:
+
+- **`PolyMCError`**: Base exception for all PolyMC API errors.
+- **`PolyMCExecutableError`**: Raised when the executable is not found, not executable, or not a valid PolyMC binary.
+
+Use `raise_on_failure=True` to have the `run()` method raise exceptions on simulation failures:
+
+```python
+try:
+    result = sim.run(
+        input_file="input",
+        output_dir="output/run_001",
+        params={"num_bp": 101},
+        raise_on_failure=True
+    )
+except PolyMCError as e:
+    print(f"Simulation failed: {e}")
+```
+
+**Note:** Command-line flags always take precedence over values in the input file, matching PolyMC's native behavior.
+
+## Development
+
+### Setting Up a Development Environment
+
+Clone the repository and install in editable mode:
+
+```bash
+git clone https://github.com/eskoruppa/PolyMCAPI
+cd PolyMCAPI
+pip install -e .
+```
+
+This allows you to make changes to the code and test them immediately without reinstalling.
+
+### Building a Distribution
+
+To build source and wheel distributions:
+
+```bash
+pip install build
+python -m build
+```
+
+This creates distribution files in the `dist/` directory.
+
+### Running the Example
+
+The included example demonstrates the API:
+
+```bash
+python example.py
+```
+
+Note: You need a compiled PolyMC executable in the `example/` directory for this to work.
+
+## License
+
+This project is licensed under the GNU General Public License v2.0. See [LICENSE](LICENSE) for details.

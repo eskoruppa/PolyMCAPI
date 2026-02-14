@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "polymcapi"
+version = "0.1.0"
+description = "A lightweight Python interface for running PolyMC simulations"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "GPL-2.0"}
+authors = [
+    {name = "Pol Schiessel"},
+]
+keywords = ["polymc", "monte-carlo", "simulation", "polymer", "dna"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/eskoruppa/PolyMCAPI"
+"Bug Tracker" = "https://github.com/eskoruppa/PolyMCAPI/issues"
+"Source" = "https://github.com/eskoruppa/PolyMCAPI"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["polymcapi*"]
+exclude = ["example*", "tests*"]

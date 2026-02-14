@@ -1,0 +1,11 @@
+# Include important documentation files
+include README.md
+include LICENSE
+
+# Exclude example files and build artifacts
+exclude example.py
+recursive-exclude example *
+recursive-exclude tests *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .DS_Store

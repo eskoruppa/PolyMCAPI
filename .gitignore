@@ -1,7 +1,13 @@
-# ignore pythom build files
+# ignore python build files
 **build/
 **__pycache__
 **.c
+**dist/
+**.egg-info/
+**.egg
+**.pyc
+**.pyo
+**.pyd
 
 # ignore test files and folders
 
@@ -26,8 +32,10 @@
 **figures/
 **Figures/
 
-# ignore egg-info directory
-**.egg-info/
+# ignore virtual environments
+**/venv/
+**/env/
+**/.venv/
 
 # sampling methods
 **sample_*.py
